@@ -8,3 +8,7 @@ npm start
 
 ## Build for production
 npm run build
+
+### Action items
+
+- [] Add proxy

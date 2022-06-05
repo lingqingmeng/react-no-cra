@@ -1,5 +1,5 @@
 {
-  "name": "react-component-doc",
+  "name": "react-no-cra",
   "version": "1.0.0",
   "description": "component doc and example app",
   "main": "index.js",
@@ -14,8 +14,7 @@
     "sample",
     "demo"
   ],
-  "author": "sumedh",
-  "license": "ISC",
+  "author": "lingqingmeng",
   "dependencies": {
     "http-server": "^14.1.1",
     "proptypes": "^1.1.0",
