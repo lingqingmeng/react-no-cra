@@ -44,6 +44,14 @@ module.exports = (function () {
   };
 
 
+  Parser.prototype.getListen = function (credentials) {
+    if (this.argsList.indexOf("-l") !== -1) {
+      return this.argsList[this.argsList.indexOf("-l") + 1]
+    }
+    return 8080; 
+  };
+
+
   /**
    * @description If cli has hyphen for -d retrieve Dev Machine User
    * @return {number} Default Dev Machine User is localdev

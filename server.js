@@ -5,7 +5,8 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 // const User = require('./models/User');
 const withAuth = require('./middleware');
-
+let Parser = require('./parser/index');
+let parser = new Parser(process.argv);
 const app = express();
 
 const secret = 'mysecretsshhh';
@@ -19,9 +20,13 @@ app.use(cookieParser());
  * DB connection logic goes here
  * 
  */
-const dbConfig = require("./config/db.config.js");
-const Sequelize = require("sequelize"); // sigh
-
+let dbConfig = require("./config/db.config.js");
+console.log("dbConfig; ",dbConfig);
+let Sequelize = require("sequelize"); // sigh
+let asyncSharedLib = (async function (dbConfig,Sequelize) {
+  // ISSUE need to use bind or some sort of low level JS
+  let p1 = require('./app/models/asyncSharedLib')(dbConfig,Sequelize);
+})(dbConfig,Sequelize)
 
 
 
@@ -131,7 +136,7 @@ app.get('/checkToken', withAuth, function(req, res) {
   res.sendStatus(200);
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(parser.getListen() || 8080);
 
 
 /**
