@@ -19,10 +19,12 @@ app.use(cookieParser());
  * DB connection logic goes here
  * 
  */
-const dbConfig = require("../config/db.config.js");
+const dbConfig = require("./config/db.config.js");
 const Sequelize = require("sequelize"); // sigh
-let sequelize = await require('./app/models')(dbConfig,Sequelize);
-let JobDescription = require("./JobDescription.model.js")(sequelize, Sequelize);
+
+
+
+
 
 
 app.use(express.static('./public'));
