@@ -19,6 +19,10 @@ app.use(cookieParser());
  * DB connection logic goes here
  * 
  */
+const dbConfig = require("../config/db.config.js");
+const Sequelize = require("sequelize"); // sigh
+let sequelize = await require('./app/models')(dbConfig,Sequelize);
+let JobDescription = require("./JobDescription.model.js")(sequelize, Sequelize);
 
 
 app.use(express.static('./public'));
@@ -33,6 +37,37 @@ app.get('/api/home', function(req, res) {
 app.get('/api/secret', withAuth, function(req, res) {
   res.send('The password is potato');
 });
+
+app.post("/job_descriptions", async function (req, res) {
+  if (!req.body.title || !req.body.description || typeof req.body.published === "undefined") {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+  let { title, description, published } = req.body;
+  const jane = Tutorials.build({ 
+    title,
+    description,
+    published
+  });
+  await jane.save();
+  res.json({
+    message: 'Tutorial with title ' + title + ' was saved to the database!'
+  })
+});
+
+
+app.get("/tutorials",function (req, res) {
+  Tutorials.findAll()
+    .then(data => {
+      console.log("data: ",data);
+      res.json({ tutorials: data });    
+    }).catch(function(err) {
+      res.status(err.code || 500).json(err);
+    });
+})
+
 
 app.post('/api/register', function(req, res) {
   // convert to postgres

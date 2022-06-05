@@ -20,7 +20,9 @@
     "proptypes": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "pg": "8.4.2",
+    "sequelize": "6.19.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
