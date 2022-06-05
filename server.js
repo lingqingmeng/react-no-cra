@@ -132,3 +132,16 @@ app.get('/checkToken', withAuth, function(req, res) {
 });
 
 app.listen(process.env.PORT || 8080);
+
+
+/**
+Not sure if this will work 
+
+let sequelizeInstance = (async function (dbConfig,Sequelize) {
+  let mymodel = require('./app/models')
+  console.log('mymodel: ',mymodel);
+  await mymodel.sequelize.authenticate();
+  let JobDescription = require("./app/models/JobDescription.model.js")(sequelize, Sequelize);
+})(dbConfig,Sequelize)
+
+*/
