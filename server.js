@@ -94,4 +94,49 @@ app.get('/checkToken', withAuth, function(req, res) {
   res.sendStatus(200);
 });
 
+
+/**
+ * @description the name of the nodes are also the unique identifiers for the nodes
+ * @description the name of the nodes are also the unique identifiers for the nodes
+ * @param n = 4, 
+ * @param routes = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200],[3,4,25],[4,0,25],[3,5,10],[5,6,20],[6,7,30],[7,0,40]]
+ * @param src = 3, 
+ * @param dst = 0, 
+ * @param k = 1
+ * @output 700
+ * @image https://gist.github.com/lingqingmeng/56797f732ee6e2f44e95ebd3098de967
+ */
+app.get('/find_cheapest_route',function (req,res) {
+
+})
+
 app.listen(process.env.PORT || 8080);
+
+
+
+/**
+ * @param {number} n
+ * @param {number[][]} routes
+ * @param {number} src
+ * @param {number} dst
+ * @param {number} k
+ * @return {number}
+ */
+function findCheapestPrice = function(n, routes, src, dst, k) {
+    let prices = Array(n).fill(Number.MAX_SAFE_INTEGER)
+    prices[src] = 0
+    
+    for (let i = 0; i < k + 1; i++) {
+        const tmp = prices.slice()
+        for (let [s, d, p] of routes) {
+            if (prices[s] === Number.MAX_SAFE_INTEGER) continue // we need to start from 0
+            
+            tmp[d] = Math.min(tmp[d], prices[s] + p) // calculate cost from src to dst, update if it is smaller
+        }
+        
+        prices = tmp
+    }
+    return prices[dst] === Number.MAX_SAFE_INTEGER ? -1 : prices[dst] 
+    // return -1 if there is no route to dst
+};
+
