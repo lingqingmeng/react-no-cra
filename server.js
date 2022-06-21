@@ -5,6 +5,8 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 // const User = require('./models/User');
 const withAuth = require('./middleware');
+const findCheapestPrice = require('./util');
+
 
 const app = express();
 
@@ -113,30 +115,4 @@ app.get('/find_cheapest_route',function (req,res) {
 app.listen(process.env.PORT || 8080);
 
 
-
-/**
- * @param {number} n
- * @param {number[][]} routes
- * @param {number} src
- * @param {number} dst
- * @param {number} k
- * @return {number}
- */
-function findCheapestPrice = function(n, routes, src, dst, k) {
-    let prices = Array(n).fill(Number.MAX_SAFE_INTEGER)
-    prices[src] = 0
-    
-    for (let i = 0; i < k + 1; i++) {
-        const tmp = prices.slice()
-        for (let [s, d, p] of routes) {
-            if (prices[s] === Number.MAX_SAFE_INTEGER) continue // we need to start from 0
-            
-            tmp[d] = Math.min(tmp[d], prices[s] + p) // calculate cost from src to dst, update if it is smaller
-        }
-        
-        prices = tmp
-    }
-    return prices[dst] === Number.MAX_SAFE_INTEGER ? -1 : prices[dst] 
-    // return -1 if there is no route to dst
-};
 
