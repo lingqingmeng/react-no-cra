@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 // const User = require('./models/User');
 const withAuth = require('./middleware');
 const findCheapestPrice = require('./util');
-
+const axios = require('axios').default;
+let crypto = require('crypto');
 
 const app = express();
 
@@ -26,10 +27,39 @@ app.use(cookieParser());
 app.use(express.static('./public'));
 
 
+const sendOutboundRequest = async (config) => {
+  let baseUrl = `http://localhost:8080`
+  try {
+    const result = await axios(`${baseUrl}/v1/authenticate/session`,{
+      method: 'PUT',
+      data: {
+        message: "hello world"
+      },
+      headers: {
+        Authorization: `Bearer ${config.accessToken}`
+      }
+    })
+  } catch (error) {
+    console.log("error: ",error);
+    let newError = new Error("Failed to make API call");
+    throw newError;
+  }
+}
 
 
-app.get('/api/home', function(req, res) {
+app.get('/api/home', function(req, res, next) {
   res.send('Welcome!');
+});
+
+app.get('/api/test', async function(req, res, next) {
+  let config = {};
+  config.accessToken = crypto.randomBytes(64).toString('hex');
+  try {
+    let outboundResponse = await sendOutboundRequest(config);
+    res.redirect(`/api/home`);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.get('/api/secret', withAuth, function(req, res) {
@@ -39,16 +69,8 @@ app.get('/api/secret', withAuth, function(req, res) {
 app.post('/api/register', function(req, res) {
   // convert to postgres
 
-  // const { email, password } = req.body;
-  // const user = new User({ email, password });
-  // user.save(function(err) {
-  //   if (err) {
-  //     console.log(err);
-  //     res.status(500).send("Error registering new user please try again.");
-  //   } else {
-  //     res.status(200).send("Welcome to the club!");
-  //   }
-  // });
+  // hits the route in /v1/authenticate/register 
+  // in node-express-sequelize-postgres
 });
 
 app.post('/api/authenticate', function(req, res) {
